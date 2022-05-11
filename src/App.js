@@ -10,10 +10,14 @@ window.Buffer = window.Buffer || require("buffer").Buffer;
 function App() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [image, setImage] = useState([]);
+  const [filteredImage, setFilteredImage] = useState('');
 
   const handleUpload = async (file) => {
     uploadFile(file, config)
-      .then(data => setSelectedFile(data.location))
+      .then(data => {
+        setSelectedFile(data.location);
+        setFilteredImage(data.location);
+      })
       .catch(err => console.error(err))
   }
 
@@ -66,11 +70,9 @@ function App() {
                 ) : (
                   <>
                     <div class='flex flex-col h-full justify-center items-center px-4'>
-                      {/* {imageList.map((image, index) => (
-                        <img src={image['data_url']} alt="" key={index} class='w-full' />
-                      ))} */}
+                      <h1 class='text-lg text-gray-800 font-bold mb-5'>Original</h1>
                       <img src={selectedFile} alt="" class='w-full' />
-                      <button onClick={() => onImageUpdate(0)} class='mt-7 px-3 py-2 rounded bg-green-500 text-white'>
+                      <button onClick={() => onImageUpdate(0)} class='mt-7 px-5 py-2 rounded bg-gray-700 text-white'>
                         Reselect An Image
                       </button>
                     </div>
@@ -81,8 +83,15 @@ function App() {
           </ReactImageUploading>
         </div>
         <div class='w-6/12 flex flex-col h-full justify-center items-center px-4'>
-          {/* <img src='https://i.ytimg.com/vi/1_q8txKyg4E/maxresdefault.jpg' alt='' class='w-full' />
-          <h1 class='mt-7 px-3 py-2 rounded'>Filtered</h1> */}
+          {filteredImage && (
+            <>
+              <h1 class='text-lg text-gray-800 font-bold mb-5'>Filtered</h1>
+              <img src={filteredImage} alt="" class='w-full' />
+              <button onClick={() => console.log('hihi')} class='mt-7 px-5 py-2 rounded bg-gray-700 text-white'>
+                Download
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
