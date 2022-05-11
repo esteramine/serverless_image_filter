@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ReactImageUploading from 'react-images-uploading';
 import { uploadFile } from 'react-s3';
 import { v4 as uuidv4 } from 'uuid';
+import { saveAs } from 'file-saver';
 
 import './App.css';
 import Sidebar from './components/Sidebar';
@@ -22,9 +23,10 @@ function App() {
   }
 
   const onChange = (imageList, addUpdateIndex) => {
-    const newFile = { ...imageList[0], name: uuidv4() }
+    const file = imageList[0].file;
+    const newFile = new File([file], uuidv4(), { type: file.type });
     setImage([newFile]);
-    handleUpload(imageList[0].file);
+    handleUpload(newFile);
   };
 
   const config = {
@@ -87,7 +89,7 @@ function App() {
             <>
               <h1 class='text-lg text-gray-800 font-bold mb-5'>Filtered</h1>
               <img src={filteredImage} alt="" class='w-full' />
-              <button onClick={() => console.log('hihi')} class='mt-7 px-5 py-2 rounded bg-gray-700 text-white'>
+              <button onClick={() => saveAs(filteredImage, filteredImage.split('/').pop()+'.jpg')} class='mt-7 px-5 py-2 rounded bg-gray-700 text-white'>
                 Download
               </button>
             </>
