@@ -6,16 +6,17 @@ import { saveAs } from 'file-saver';
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
-function ImagePanel() {
+function ImagePanel({ filteredImage, setFilteredImage, setOriginalImage, setSelectedFilter }) {
     const [selectedFile, setSelectedFile] = useState(null);
     const [image, setImage] = useState([]);
-    const [filteredImage, setFilteredImage] = useState('');
 
     const handleUpload = async (file) => {
         uploadFile(file, config)
             .then(data => {
                 setSelectedFile(data.location);
                 setFilteredImage(data.location);
+                setOriginalImage(data.location);
+                setSelectedFilter();
             })
             .catch(err => console.error(err))
     }
