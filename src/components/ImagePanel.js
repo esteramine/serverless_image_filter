@@ -67,14 +67,14 @@ function ImagePanel({ filteredImage, setFilteredImage, setOriginalImage, setSele
                             ) : (
                                 <>
                                     <div class='flex flex-col h-full justify-center items-center px-4'>
-                                        <h1 class={'text-lg text-gray-800 font-bold mb-5 '+(imageUploading? 'hidden':'')}>Original</h1>
+                                        <h1 class={'text-lg text-gray-800 font-bold mb-5 ' + (imageUploading ? 'hidden' : '')}>Original</h1>
                                         <img src={selectedFile} alt="" class='w-full relative' />
                                         {imageUploading &&
                                             (<div class='absolute'>
                                                 <ThreeDots color='rgb(243,244,246)' height="100" width="100" />
                                             </div>)
                                         }
-                                        <button onClick={() => onImageUpdate(0)} class={'mt-7 px-5 py-2 rounded bg-gray-700 text-white '+(imageUploading? 'hidden':'')}>
+                                        <button onClick={() => onImageUpdate(0)} class={'mt-7 px-5 py-2 rounded bg-gray-700 text-white ' + (imageUploading ? 'hidden' : '')}>
                                             Reselect An Image
                                         </button>
                                     </div>
@@ -94,7 +94,12 @@ function ImagePanel({ filteredImage, setFilteredImage, setOriginalImage, setSele
                                 <ThreeDots color='rgb(243,244,246)' height="100" width="100" />
                             </div>
                         )}
-                        <button onClick={() => saveAs(filteredImage, filteredImage.split('/').pop() + '.jpg')} class='mt-7 px-5 py-2 rounded bg-gray-700 text-white'>
+                        <button
+                            onClick={() => {
+                                saveAs(filteredImage, filteredImage.split('/').pop() + '.jpg');
+                            }}
+                            class='mt-7 px-5 py-2 rounded bg-gray-700 text-white'
+                        >
                             Download
                         </button>
                     </>
