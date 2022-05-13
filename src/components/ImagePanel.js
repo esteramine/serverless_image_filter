@@ -3,12 +3,14 @@ import ReactImageUploading from 'react-images-uploading';
 import { uploadFile } from 'react-s3';
 import { v4 as uuidv4 } from 'uuid';
 import { saveAs } from 'file-saver';
+import { ThreeDots } from 'react-loader-spinner';
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
-function ImagePanel({ filteredImage, setFilteredImage, setOriginalImage, setSelectedFilter }) {
+function ImagePanel({ filteredImage, setFilteredImage, setOriginalImage, setSelectedFilter, filterLoading }) {
     const [selectedFile, setSelectedFile] = useState(null);
     const [image, setImage] = useState([]);
+    const [imageUploading, setImageUploading] = useState(false);
 
     const handleUpload = async (file) => {
         uploadFile(file, config)
@@ -16,7 +18,8 @@ function ImagePanel({ filteredImage, setFilteredImage, setOriginalImage, setSele
                 setSelectedFile(data.location);
                 setFilteredImage(data.location);
                 setOriginalImage(data.location);
-                setSelectedFilter();
+                setSelectedFilter('Original');
+                setImageUploading(false);
             })
             .catch(err => console.error(err))
     }
@@ -25,6 +28,7 @@ function ImagePanel({ filteredImage, setFilteredImage, setOriginalImage, setSele
         const file = imageList[0].file;
         const newFile = new File([file], uuidv4(), { type: file.type });
         setImage([newFile]);
+        setImageUploading(true);
         handleUpload(newFile);
     };
 
@@ -63,9 +67,14 @@ function ImagePanel({ filteredImage, setFilteredImage, setOriginalImage, setSele
                             ) : (
                                 <>
                                     <div class='flex flex-col h-full justify-center items-center px-4'>
-                                        <h1 class='text-lg text-gray-800 font-bold mb-5'>Original</h1>
-                                        <img src={selectedFile} alt="" class='w-full' />
-                                        <button onClick={() => onImageUpdate(0)} class='mt-7 px-5 py-2 rounded bg-gray-700 text-white'>
+                                        <h1 class={'text-lg text-gray-800 font-bold mb-5 '+(imageUploading? 'hidden':'')}>Original</h1>
+                                        <img src={selectedFile} alt="" class='w-full relative' />
+                                        {imageUploading &&
+                                            (<div class='absolute'>
+                                                <ThreeDots color='rgb(243,244,246)' height="100" width="100" />
+                                            </div>)
+                                        }
+                                        <button onClick={() => onImageUpdate(0)} class={'mt-7 px-5 py-2 rounded bg-gray-700 text-white '+(imageUploading? 'hidden':'')}>
                                             Reselect An Image
                                         </button>
                                     </div>
@@ -79,7 +88,12 @@ function ImagePanel({ filteredImage, setFilteredImage, setOriginalImage, setSele
                 {filteredImage && (
                     <>
                         <h1 class='text-lg text-gray-800 font-bold mb-5'>Filtered</h1>
-                        <img src={filteredImage} alt="" class='w-full' />
+                        <img src={filteredImage} alt="" class='w-full relative' />
+                        {filterLoading && (
+                            <div class='absolute'>
+                                <ThreeDots color='rgb(243,244,246)' height="100" width="100" />
+                            </div>
+                        )}
                         <button onClick={() => saveAs(filteredImage, filteredImage.split('/').pop() + '.jpg')} class='mt-7 px-5 py-2 rounded bg-gray-700 text-white'>
                             Download
                         </button>

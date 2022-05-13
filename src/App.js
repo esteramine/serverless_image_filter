@@ -8,6 +8,7 @@ function App() {
   const [originalImage, setOriginalImage] = useState('');
   const [filteredImage, setFilteredImage] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('Original');
+  const [filterLoading, setFilterLoading] = useState(false);
 
   return (
       <div className="App" class='flex flex-row'>
@@ -17,6 +18,7 @@ function App() {
             setFilteredImage={(filteredImage) => setFilteredImage(filteredImage)}
             selectedFilter={selectedFilter}
             setSelectedFilter={(filter)=> setSelectedFilter(filter)}
+            setFilterLoading={(loading)=> setFilterLoading(loading)}
           />
         </div>
 
@@ -26,6 +28,7 @@ function App() {
             setFilteredImage={(filteredImage) => setFilteredImage(filteredImage)}
             filteredImage={filteredImage}
             setSelectedFilter={()=>setSelectedFilter('Original')}
+            filterLoading={filterLoading}
           />
         </div>
       </div>

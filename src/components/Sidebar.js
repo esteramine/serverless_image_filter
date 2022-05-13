@@ -1,53 +1,59 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 
-function Sidebar({ originalImage, setFilteredImage, selectedFilter, setSelectedFilter }) {
+function Sidebar({ originalImage, setFilteredImage, selectedFilter, setSelectedFilter, setFilterLoading }) {
     const originalImageName = originalImage.split('/').pop();
     const filters = ['Original', 'Sharpen', 'Blur', 'Pencil Sketch', 'Sepia', 'Invert'];
 
     const applyFilter = {
         'Original': () => {
             setFilteredImage(originalImage);
+            setFilterLoading(false);
         },
-        'Sharpen': async() => {
+        'Sharpen': async () => {
             axios
-            .get('https://o3ce9nt019.execute-api.us-east-1.amazonaws.com/default/sharpenfilter?name='+originalImageName)
-            .then(res => {
-                setFilteredImage(res.data);
-            })
-            .catch(err => console.log(err));
+                .get('https://o3ce9nt019.execute-api.us-east-1.amazonaws.com/default/sharpenfilter?name=' + originalImageName)
+                .then(res => {
+                    setFilteredImage(res.data);
+                    setFilterLoading(false);
+                })
+                .catch(err => console.log(err));
         },
-        'Blur': async() => {
+        'Blur': async () => {
             axios
-            .get('https://2cau2rbd1h.execute-api.us-east-1.amazonaws.com/default/blurfilter2?name='+originalImageName)
-            .then(res => {
-                setFilteredImage(res.data);
-            })
-            .catch(err => console.log(err));
+                .get('https://2cau2rbd1h.execute-api.us-east-1.amazonaws.com/default/blurfilter2?name=' + originalImageName)
+                .then(res => {
+                    setFilteredImage(res.data);
+                    setFilterLoading(false);
+                })
+                .catch(err => console.log(err));
         },
-        'Pencil Sketch': async() => {
+        'Pencil Sketch': async () => {
             axios
-            .get('https://2zoskv0sch.execute-api.us-east-1.amazonaws.com/default/pencilsketchfilter?name='+originalImageName)
-            .then(res => {
-                setFilteredImage(res.data);
-            })
-            .catch(err => console.log(err));
+                .get('https://2zoskv0sch.execute-api.us-east-1.amazonaws.com/default/pencilsketchfilter?name=' + originalImageName)
+                .then(res => {
+                    setFilteredImage(res.data);
+                    setFilterLoading(false);
+                })
+                .catch(err => console.log(err));
         },
-        'Sepia': async() => {
+        'Sepia': async () => {
             axios
-            .get('https://1bzw2rt9hi.execute-api.us-east-1.amazonaws.com/default/sepiafilter?name='+originalImageName)
-            .then(res => {
-                setFilteredImage(res.data);
-            })
-            .catch(err => console.log(err));
+                .get('https://1bzw2rt9hi.execute-api.us-east-1.amazonaws.com/default/sepiafilter?name=' + originalImageName)
+                .then(res => {
+                    setFilteredImage(res.data);
+                    setFilterLoading(false);
+                })
+                .catch(err => console.log(err));
         },
-        'Invert': async() => {
+        'Invert': async () => {
             axios
-            .get('https://1p4rjpgmj6.execute-api.us-east-1.amazonaws.com/default/invertfilter?name='+originalImageName)
-            .then(res => {
-                setFilteredImage(res.data);
-            })
-            .catch(err => console.log(err));
+                .get('https://1p4rjpgmj6.execute-api.us-east-1.amazonaws.com/default/invertfilter?name=' + originalImageName)
+                .then(res => {
+                    setFilteredImage(res.data);
+                    setFilterLoading(false);
+                })
+                .catch(err => console.log(err));
         },
     }
 
@@ -61,6 +67,9 @@ function Sidebar({ originalImage, setFilteredImage, selectedFilter, setSelectedF
                                 onClick={() => {
                                     setSelectedFilter(e);
                                     applyFilter[e]();
+                                    if (e !== 'Original') {
+                                        setFilterLoading(true);
+                                    }
                                 }}
                                 class={(selectedFilter === e ? 'bg-gray-700 ' : 'bg-transparent ') + "flex w-full items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"}
                             >
