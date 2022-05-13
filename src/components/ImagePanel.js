@@ -8,14 +8,12 @@ import { ThreeDots } from 'react-loader-spinner';
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 function ImagePanel({ filteredImage, setFilteredImage, originalImage, setOriginalImage, setSelectedFilter, filterLoading }) {
-    const [selectedFile, setSelectedFile] = useState(null);
     const [image, setImage] = useState([]);
     const [imageUploading, setImageUploading] = useState(false);
 
     const handleUpload = async (file) => {
         uploadFile(file, config)
             .then(data => {
-                setSelectedFile(data.location);
                 setFilteredImage(data.location);
                 setOriginalImage(data.location);
                 setSelectedFilter('Original');
@@ -85,7 +83,7 @@ function ImagePanel({ filteredImage, setFilteredImage, originalImage, setOrigina
                 </ReactImageUploading>
             </div>
             <div class='w-6/12 flex flex-col h-full justify-center items-center px-4'>
-                {filterLoading && (
+                {!filteredImage && filterLoading && (
                     <div>
                         <ThreeDots color='rgb(243,244,246)' height="100" width="100" />
                     </div>

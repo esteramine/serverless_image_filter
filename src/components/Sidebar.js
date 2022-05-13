@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React from 'react';
 
 function Sidebar({ originalImage, setFilteredImage, selectedFilter, setSelectedFilter, setFilterLoading }) {
     const originalImageName = originalImage.split('/').pop();

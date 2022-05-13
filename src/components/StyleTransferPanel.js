@@ -9,7 +9,6 @@ import axios from 'axios';
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 function StyleTransferPanel({ filteredImage, setFilteredImage, originalImage, setOriginalImage, setSelectedFilter, filterLoading }) {
-    const [selectedFile, setSelectedFile] = useState(null);
     const [styleSelectedFile, setStyleSelectedFile] = useState(null);
     const [image, setImage] = useState([]);
     const [styleImage, setStyleImage] = useState([]);
@@ -21,7 +20,6 @@ function StyleTransferPanel({ filteredImage, setFilteredImage, originalImage, se
     const handleUpload = async (file) => {
         uploadFile(file, config)
             .then(data => {
-                setSelectedFile(data.location);
                 setFilteredImage(data.location);
                 setOriginalImage(data.location);
                 setSelectedFilter('Original');
