@@ -7,7 +7,7 @@ import { ThreeDots } from 'react-loader-spinner';
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
-function ImagePanel({ filteredImage, setFilteredImage, setOriginalImage, setSelectedFilter, filterLoading }) {
+function ImagePanel({ filteredImage, setFilteredImage, originalImage, setOriginalImage, setSelectedFilter, filterLoading }) {
     const [selectedFile, setSelectedFile] = useState(null);
     const [image, setImage] = useState([]);
     const [imageUploading, setImageUploading] = useState(false);
@@ -54,7 +54,7 @@ function ImagePanel({ filteredImage, setFilteredImage, setOriginalImage, setSele
                         dragProps,
                     }) => (
                         <div class='w-full'>
-                            {image.length === 0 ? (
+                            {originalImage === '' ? (
                                 <div class={'flex justify-center'}>
                                     <button
                                         class={(isDragging ? 'bg-gray-200' : 'bg-gray-100') + ' border-dashed border-4 border-gray-400 text-gray-600 font-bold w-10/12 py-24'}
@@ -68,7 +68,7 @@ function ImagePanel({ filteredImage, setFilteredImage, setOriginalImage, setSele
                                 <>
                                     <div class='flex flex-col h-full justify-center items-center px-4'>
                                         <h1 class={'text-lg text-gray-800 font-bold mb-5 ' + (imageUploading ? 'hidden' : '')}>Original</h1>
-                                        <img src={selectedFile} alt="" class='w-full relative' />
+                                        <img src={originalImage} alt="" class='w-full relative' />
                                         {imageUploading &&
                                             (<div class='absolute'>
                                                 <ThreeDots color='rgb(243,244,246)' height="100" width="100" />
@@ -85,6 +85,11 @@ function ImagePanel({ filteredImage, setFilteredImage, setOriginalImage, setSele
                 </ReactImageUploading>
             </div>
             <div class='w-6/12 flex flex-col h-full justify-center items-center px-4'>
+                {filterLoading && (
+                    <div>
+                        <ThreeDots color='rgb(243,244,246)' height="100" width="100" />
+                    </div>
+                )}
                 {filteredImage && (
                     <>
                         <h1 class='text-lg text-gray-800 font-bold mb-5'>Filtered</h1>
