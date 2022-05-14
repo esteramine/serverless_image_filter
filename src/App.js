@@ -13,7 +13,7 @@ function App() {
 
   return (
     <div className="App" class='flex flex-row'>
-      <div class='w-2/12'>
+      <div class='lg:w-2/12 md:w-3/12'>
         <Sidebar
           originalImage={originalImage}
           setFilteredImage={(filteredImage) => setFilteredImage(filteredImage)}
@@ -23,7 +23,7 @@ function App() {
         />
       </div>
 
-      <div class='flex flex-row w-10/12'>
+      <div class='flex flex-row lg:w-10/12 md:9/12'>
         {selectedFilter === 'Style Transfer' ? (
           <StyleTransferPanel
             originalImage={originalImage}
