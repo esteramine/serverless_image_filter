@@ -72,7 +72,7 @@ function Sidebar({ originalImage, setFilteredImage, selectedFilter, setSelectedF
 
     return (
         <aside class="h-screen" aria-label="Sidebar">
-            <div class="h-full overflow-y-auto py-4 px-3 bg-gray-50 dark:bg-gray-800">
+            <div class="h-full overflow-y-auto scrollbar-hide py-4 px-3 bg-gray-50 dark:bg-gray-800">
                 <ul class="space-y-2">
                     <h1 class='flex w-full items-center p-2 text-base text-gray-900 rounded-lg dark:text-white font-bold'>Filters</h1>
                     {filters.map(e => (
