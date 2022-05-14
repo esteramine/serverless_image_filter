@@ -1,10 +1,8 @@
 import axios from 'axios';
 import React from 'react';
 
-function Sidebar({ originalImage, setFilteredImage, selectedFilter, setSelectedFilter, setFilterLoading }) {
+function Sidebar({ filters, setFilters, styles, setStyles, originalImage, setFilteredImage, selectedFilter, setSelectedFilter, setFilterLoading }) {
     const originalImageName = originalImage.split('/').pop();
-    const filters = ['Original', 'Sharpen', 'Blur', 'Pencil Sketch', 'Sepia', 'Invert'];
-    const styles = ['Candy', 'Composition', 'Feathers', 'La Muse', 'Mosaic', 'Starry Night', 'The Scream', 'The Wave', 'Undue'];
 
     const applyFilter = {
         'Original': () => {
@@ -60,14 +58,13 @@ function Sidebar({ originalImage, setFilteredImage, selectedFilter, setSelectedF
 
     const applyStyle = async (styleName) => {
         const style = styleName.replace(' ', '_');
-        console.log(style);
-        // axios
-        //     .get('https://1ub4gpl9ll.execute-api.us-east-1.amazonaws.com/default/StyleTransfer?name=' + originalImageName + '&style=' + style)
-        //     .then(res => {
-        //         setFilteredImage(res.data);
-        //         setFilterLoading(false);
-        //     })
-        //     .catch(err => console.log(err));
+        axios
+            .get('https://jhbhcqn1ka.execute-api.us-east-1.amazonaws.com/default/StyleTransfering?name=' + originalImageName + '&style=' + style)
+            .then(res => {
+                setFilteredImage(res.data);
+                setFilterLoading(false);
+            })
+            .catch(err => console.log(err));
     }
 
     return (
@@ -75,14 +72,20 @@ function Sidebar({ originalImage, setFilteredImage, selectedFilter, setSelectedF
             <div class="h-full overflow-y-auto scrollbar-hide py-4 px-3 bg-gray-50 dark:bg-gray-800">
                 <ul class="space-y-2">
                     <h1 class='flex w-full items-center p-2 text-base text-gray-900 rounded-lg dark:text-white font-bold'>Filters</h1>
-                    {filters.map(e => (
+                    {originalImage && Object.keys(filters).map(e => (
                         <li key={e}>
                             <button
                                 onClick={() => {
                                     setSelectedFilter(e);
-                                    applyFilter[e]();
-                                    if (e !== 'Original') {
-                                        setFilterLoading(true);
+                                    if (filters[e]) {
+                                        setFilteredImage('https://comp4651imagebucket.s3.amazonaws.com/' + originalImageName + '-' + e.toLowerCase().replace(' ', '_'));
+                                    }
+                                    else {
+                                        applyFilter[e]();
+                                        setFilters({ ...filters, [e]: true });
+                                        if (e !== 'Original') {
+                                            setFilterLoading(true);
+                                        }
                                     }
                                 }}
                                 class={(selectedFilter === e ? 'bg-gray-700 ' : 'bg-transparent ') + "flex w-full items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"}
@@ -105,19 +108,25 @@ function Sidebar({ originalImage, setFilteredImage, selectedFilter, setSelectedF
                 </ul>
                 <ul class='pt-4 mt-4 space-y-2 border-gray-100 border-t-2 dark:border-gray-700'>
                     <h1 class='flex w-full items-center p-2 text-base text-gray-900 rounded-lg dark:text-white font-bold'>Style Transfer</h1>
-                    {styles.map(e => (
+                    {originalImage && Object.keys(styles).map(e => (
                         <li key={e}>
                             <button
                                 onClick={() => {
                                     setSelectedFilter(e);
-                                    applyStyle(e);
-                                    setFilterLoading(true);
+                                    if (styles[e]) {
+                                        setFilteredImage('https://comp4651imagebucket.s3.amazonaws.com/' + originalImageName + '-' + e.replace(' ', '_') + '.jpg');
+                                    }
+                                    else {
+                                        applyStyle(e);
+                                        setStyles({ ...styles, [e]: true });
+                                        setFilterLoading(true);
+                                    }
                                 }}
                                 class={(selectedFilter === e ? 'bg-gray-700 ' : 'bg-transparent ') + "flex w-full items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"}
                                 disabled={originalImage === ''}
                             >
                                 {/* <svg class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg> */}
-                                <span class="ml-3">{e}</span>
+                                <span class="ml-3 text-left">{e}</span>
                             </button>
                         </li>
                     ))}

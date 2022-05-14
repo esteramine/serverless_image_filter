@@ -10,11 +10,17 @@ function App() {
   const [filteredImage, setFilteredImage] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('Original');
   const [filterLoading, setFilterLoading] = useState(false);
+  const [filters, setFilters] = useState({ 'Original': false, 'Sharpen': false, 'Blur': false, 'Pencil Sketch': false, 'Sepia': false, 'Invert': false });
+  const [styles, setStyles] = useState({'Candy': false, 'Composition': false, 'Feathers': false, 'La Muse': false, 'Mosaic': false, 'Starry Night': false, 'The Scream': false, 'The Wave': false, 'Undue': false});
 
   return (
     <div className="App" class='flex flex-row'>
-      <div class='lg:w-2/12 md:w-3/12'>
+      <div class='lg:w-2/12 w-3/12 '>
         <Sidebar
+          filters={filters}
+          setFilters={(filter) => setFilters(filter)} // set filter status
+          styles={styles}
+          setStyles={(style)=>setStyles(style)}
           originalImage={originalImage}
           setFilteredImage={(filteredImage) => setFilteredImage(filteredImage)}
           selectedFilter={selectedFilter}
@@ -23,7 +29,7 @@ function App() {
         />
       </div>
 
-      <div class='flex flex-row lg:w-10/12 md:9/12'>
+      <div class='flex flex-row lg:w-10/12 w-9/12'>
         {selectedFilter === 'Style Transfer' ? (
           <StyleTransferPanel
             originalImage={originalImage}
